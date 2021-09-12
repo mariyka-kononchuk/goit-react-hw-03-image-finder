@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
-import data from '../../data/contacts.json'
-import s from './App.module.css';
+
+//import s from './App.module.css';
 
 import Container from '../Container';
 
 import Modal from '../Modal';
 import Loader from '../Loader';
-import Searchbar from '../components/Searchbar';
-import ImageGallery from '../components/ImageGallery';
+import Searchbar from '../Searchbar';
+import ImageGallery from '../ImageGallery';
 
 const baseUrl = "https://pixabay.com/api/";
 axios.defaults.baseURL = baseUrl;
@@ -18,10 +18,28 @@ const apiKey = "22651538-53630abe578d2561aeb41817a";
 class App extends Component {
 
   state = {
-    images: data,
-    filter: ''
+    images: [],
+    filter: '',
+    showModal: false
   }
 
+  componentDidMount() {
+      const contacts = localStorage.getItem('contacts');
+      const parsedContacts = JSON.parse(contacts);
+      if (parsedContacts) {
+        this.setState({ contacts: parsedContacts });
+      }
+    }
+
+    componentDidUpdate(prevPops, prevState) {
+      const { contacts} = this.state;
+      if (contacts !== prevState.contacts) {
+        console.log("Обновилось поле контактов");
+        localStorage.setItem('contacts', JSON.stringify(contacts));
+      }
+    }
+
+  
   // addContact = ({ name, number }) => {
   //   const { contacts } = this.state;
   //   const contact = {
@@ -56,17 +74,31 @@ class App extends Component {
     return images.filter(image =>
       image.name.toLowerCase().includes(normilizedFilter));
   }
+
+  toggleModal = () => {
+    this.setState(({showModal}) => ({
+      showModal: !showModal,
+    }))
+  }
   
   render() {
-    const { filter } = this.state;
+    const { filter, showModal } = this.state;
     const visibleContacts = this.getVisibleContacts();
     return (
       <Container>
         <div>
-          <Searchbar onAddContact={this.addContact} />
-          <ImageGallery value={filter} onChange={this.changeFilter} />
-          <Modal contacts={visibleContacts} onDeleteContact={this.deleteContact} />
-          <Loader contacts={visibleContacts} onDeleteContact={this.deleteContact} />
+          {/* <Searchbar onSubmit={this.submit} />
+          <ImageGallery value={filter} onChange={this.changeFilter} /> */}
+          <button type="button" onClick ={this.toggleModal}>
+          Open modal
+          </button>
+          {showModal && <Modal onClose = {this.toggleModal}>
+            <h1> Hello</h1>
+            <img src="" alt="" />
+            <button type="button" onClick={this.toggleModal}>Close Modal
+            </button>
+          </Modal>}
+          {/* <Loader contacts={visibleContacts} /> */}
         </div>
       </Container>
     );

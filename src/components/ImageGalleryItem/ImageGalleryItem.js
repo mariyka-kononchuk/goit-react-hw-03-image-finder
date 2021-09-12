@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import s from './ContactListItem.module.css';
+//import s from './ContactListItem.module.css';
 
 const ImageGalleryItem = ({ src, alt}) => (
     <img src={src} alt={alt} className="ImageGalleryItem-image" />
