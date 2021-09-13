@@ -5,11 +5,12 @@ import axios from "axios";
 import ImageGalleryItem from '../ImageGalleryItem';
 import SpinnerLoader from '../Loader';
 import { toast } from 'react-toastify';
+import {fetchImages} from '../../services/images-api'
 
 
-const baseUrl = "https://pixabay.com/api/";
-axios.defaults.baseURL = baseUrl;
-const apiKey = "22651538-53630abe578d2561aeb41817a";
+// const baseUrl = "https://pixabay.com/api/";
+// axios.defaults.baseURL = baseUrl;
+// const apiKey = "22651538-53630abe578d2561aeb41817a";
 
 export default class ImageGallery extends Component {
     state = {
@@ -19,40 +20,28 @@ export default class ImageGallery extends Component {
         status: 'idle'
   }
 
-    async componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps, prevState) {
         
         const prevName = prevProps.searchName;
         const nextName = this.props.searchName;
 
         if (prevName !== nextName) {
             this.setState({ status: 'pending' });
-            let queryParams = `?key=${apiKey}&q=${nextName}&image_type=photo&per_page=12&page=1&orientation=horizontal&safesearch=true`;
-            let url = baseUrl + queryParams;
-
-            //fetch
-               await fetch(url)
-                    .then(response => {
-                        if (response.ok) {
-                            return response.json();
-                        }
-                        return Promise.reject(
-                            new Error('Извините, по вашему запросу ничего не найдено'),
-                        );
-                    })
-                    .then(images =>
-                        this.setState({images: images.hits, status: 'resolved'}))
-                    .catch(error => this.setState({ error, status: 'rejected' }))
+            fetchImages(nextName)
+            .then((images) => {
+                    this.setState({ images: images.hits, status: 'resolved' });
+                    console.log(this.state.images);})
+                        
+            .catch (error => this.setState({ error, status: 'rejected' }))
+        }
             
-                // if (this.state.images.length === 0) {
-                //     // this.setState({ status: 'rejected' });
-                //     return toast.error('Извините, по вашему запросу ничего не найдено');
-                // }
-            };
-           
-            // if (this.state.images.length === 0) {
-            //     return toast.error('Извините, по вашему запросу ничего не найдено');
-            // }
+                
         
+            
+        // setTimeout( ()=> {if (this.state.images.length === 0) {
+        //     return toast.error('Извините, по вашему запросу ничего не найдено')
+        // }}, 2000);
+
     }
             
             // axios  
@@ -77,7 +66,7 @@ export default class ImageGallery extends Component {
         }
 
         if (status === 'pending') {
-            <SpinnerLoader />
+            return <SpinnerLoader />
         }
 
         if (status === 'rejected') {
