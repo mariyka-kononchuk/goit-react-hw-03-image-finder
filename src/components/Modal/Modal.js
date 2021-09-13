@@ -7,6 +7,7 @@ import '../../styles.css';
 const modalRoot = document.querySelector('#modal-root');
 
 class Modal extends Component  {
+    
     componentDidMount() {
         console.log('Modal componentDidMount');
         window.addEventListener('keydown', this.handleKeyDown);

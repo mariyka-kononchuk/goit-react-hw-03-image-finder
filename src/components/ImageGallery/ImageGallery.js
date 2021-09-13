@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import axios from "axios";
 //import s from './ContactList.module.css';
 import ImageGalleryItem from '../ImageGalleryItem';
+import LoadMoreButton from '../Button';
 import SpinnerLoader from '../Loader';
 import { toast } from 'react-toastify';
 import {fetchImages} from '../../services/images-api'
@@ -21,7 +22,6 @@ export default class ImageGallery extends Component {
   }
 
     componentDidUpdate(prevProps, prevState) {
-        
         const prevName = prevProps.searchName;
         const nextName = this.props.searchName;
 
@@ -33,31 +33,17 @@ export default class ImageGallery extends Component {
                     console.log(this.state.images);})
                         
             .catch (error => this.setState({ error, status: 'rejected' }))
-        }
-            
-                
-        
-            
+        } 
         // setTimeout( ()=> {if (this.state.images.length === 0) {
         //     return toast.error('Извините, по вашему запросу ничего не найдено')
         // }}, 2000);
+    }
 
+    toggleLoadMore() {
+        
     }
             
-            // axios  
-            // try {
-            //     const response = await axios.get(url);
-            //     const images = response.data.hits;
-            //     console.log(images);
-            //     this.setState({ images, status: 'resolved' });
-            // } catch (error) {
-            //     this.setState({ status: 'rejecting' });
-            //     throw error;
-            // }
-            // if (this.state.images.length === 0) {
-            //     return toast.error('Извините, по вашему запросу ничего не найдено');
-            // }
-        
+      
     render() {
         const { images, status } = this.state;
 
@@ -83,7 +69,8 @@ export default class ImageGallery extends Component {
                             </li>
                         ))}
                     </ul>
-            </div>
+                    <LoadMoreButton onClick ={this.toggleLoadMore} />
+               </div>
             )
         }
 
