@@ -14,7 +14,8 @@ export default class ImageGallery extends Component {
     state = {
         images: null,
         error: null,
-        page:1,
+        page: 1,
+        searchResult: null,
         status: 'idle'
     }
 
@@ -40,14 +41,19 @@ export default class ImageGallery extends Component {
             this.setState({ status: 'pending', page:1 });
             fetchImages(nextName, nextPage)
             .then((data) => {
-                this.setState({ images: data.hits, status: 'resolved' });
+                this.setState({ images: data.hits, searchResult: data.total, status: 'resolved' });
                 console.log(this.state.images);
+                if (this.state.images.length === 0) {
+                    // this.setState({ status: 'rejected' });
+                    return toast('Извините, по вашему запросу ничего не найдено', {style: {
+                                borderRadius: '10px',
+                                background: '#333',
+                                color: '#fff',
+                    },});
+                }
             })
             .catch (error => this.setState({ error, status: 'rejected' }))
-        } 
-        // setTimeout( ()=> {if (this.state.images.length === 0) {
-        //     return toast('Извините, по вашему запросу ничего не найдено')
-        // }}, 2000);
+        }
     }
 
     toggleLoadMore = () => {
@@ -59,7 +65,7 @@ export default class ImageGallery extends Component {
     }
             
     render() {
-        const { images, status} = this.state;
+        const { images, status, searchResult} = this.state;
 
         if (status === 'idle') {
             return <div></div>
@@ -88,7 +94,7 @@ export default class ImageGallery extends Component {
                             </li>
                         ))}
                     </ul>
-                    <LoadMoreButton onClick={this.toggleLoadMore} />
+                    {searchResult>12 && <LoadMoreButton onClick={this.toggleLoadMore} />}
                     
                </div>
             )
