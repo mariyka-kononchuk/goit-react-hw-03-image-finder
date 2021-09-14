@@ -1,4 +1,5 @@
-import React, { Component }  from 'react';
+import React, { Component } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
 //import s from './ContactList.module.css';
 import ImageGalleryItem from '../ImageGalleryItem';
@@ -8,46 +9,40 @@ import SpinnerLoader from '../Loader';
 import toast from 'react-hot-toast';
 import {fetchImages} from '../../services/images-api'
 
-
-// const baseUrl = "https://pixabay.com/api/";
-// axios.defaults.baseURL = baseUrl;
-// const apiKey = "22651538-53630abe578d2561aeb41817a";
-
 export default class ImageGallery extends Component {
+
     state = {
         images: null,
-        // loading: false,
         error: null,
         page:1,
         status: 'idle'
-  }
+    }
 
     componentDidUpdate(prevProps, prevState) {
         const prevName = prevProps.searchName;
         const nextName = this.props.searchName;
         const prevPage = prevState.page;
         const nextPage = this.state.page;
+        const images = this.state.images;
 
         if (prevPage < nextPage) {
-            //fetch
             this.setState({ status: 'pending'});
             fetchImages(nextName, nextPage)
-                .then((images) => {
-                let result = [...this.state.images, ...images.hits];
-                this.setState({ images:result, status: 'resolved' });
-                    //this.setState({ images: images.hits, status: 'resolved' });
-                    console.log(this.state.images);})
-                        
+            .then((data) => {
+                let newImages = [...images, ...data.hits];
+                this.setState({ images:newImages, status: 'resolved' });
+                console.log(this.state.images);
+            })
             .catch (error => this.setState({ error, status: 'rejected' }))
         }
 
         if (prevName !== nextName) {
             this.setState({ status: 'pending', page:1 });
-            fetchImages(nextName, this.state.page)
-            .then((images) => {
-                    this.setState({ images: images.hits, status: 'resolved' });
-                    console.log(this.state.images);})
-                        
+            fetchImages(nextName, nextPage)
+            .then((data) => {
+                this.setState({ images: data.hits, status: 'resolved' });
+                console.log(this.state.images);
+            })
             .catch (error => this.setState({ error, status: 'rejected' }))
         } 
         // setTimeout( ()=> {if (this.state.images.length === 0) {
@@ -56,26 +51,15 @@ export default class ImageGallery extends Component {
     }
 
     toggleLoadMore = () => {
-        this.setState({ status: 'pending', page: this.state.page + 1 });
-        
-//         setTimeout( ()=> fetchImages(this.props.searchName, this.state.page)
-//             .then((images) => {
-                
-//                 let result = [...this.state.images, ...images.hits];
-//                 this.setState({ images:result, status: 'resolved' });
-//                 console.log(this.state.images);})
-                        
-//             .catch(error => this.setState({ error, status: 'rejected' })), 2000)
-        
-//         window.scrollTo({
-//   top: document.documentElement.scrollHeight,
-//   behavior: 'smooth',
+        this.setState({ status: 'pending', page: this.state.page + 1 });   
+//   window.scrollTo({
+    //   top: document.documentElement.scrollHeight,
+    //   behavior: 'smooth',
 // });
     }
             
-      
     render() {
-        const { images, status } = this.state;
+        const { images, status} = this.state;
 
         if (status === 'idle') {
             return <div></div>
@@ -99,7 +83,7 @@ export default class ImageGallery extends Component {
                 <div>
                     <ul className="GalleryList" >
                         {images.map(image=> (
-                            <li onClick={()=>this.props.onSelect(image.pageURL) } className="ImageGalleryItem" key={image.previewURL} >
+                            <li onClick={()=>this.props.onSelect(image.pageURL) } className="ImageGalleryItem" key={uuidv4()} >
                                 <ImageGalleryItem src={image.previewURL} alt={image.tags}/>
                             </li>
                         ))}

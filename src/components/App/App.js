@@ -19,11 +19,8 @@ class App extends Component {
   state = {
     searchName: '',
     images: null,
-    showModal: false,
     selectedImage:null
   }
-
-  toggleModal = () => this.setState({ selectedImage: null });
 
   handleSearchSubmit = searchName => {
     this.setState({ searchName });
@@ -34,6 +31,8 @@ class App extends Component {
     this.setState({ selectedImage: imageUrl })
   }
 
+  toggleModal = () => this.setState({ selectedImage: null });
+
   render() {
     const { searchName, selectedImage  } = this.state;
     
@@ -42,11 +41,11 @@ class App extends Component {
         <div>
           <Searchbar onSubmit={this.handleSearchSubmit} />
           {/* <ToastContainer autoClose={3000} /> */}
-          <Toaster/>
           <ImageGallery searchName={searchName} onSelect={this.handleSelectImage}/>
           {selectedImage && <Modal onClose = {this.toggleModal}>
             <img src={selectedImage} alt="" />
           </Modal>}
+          <Toaster/>
         </div>
       </Container>
     );
