@@ -43,7 +43,7 @@ export default class Searchbar extends Component {
                         value={searchName}
                         onChange = {this.handleNameChange}
                         autocomplete="off"
-                        autofocus
+                        autoFocus
                         placeholder="Search images and photos"
                     />
                     {/* <IconButton type = "submit" onClick={this.props.onSubmit} aria-label="Search images">

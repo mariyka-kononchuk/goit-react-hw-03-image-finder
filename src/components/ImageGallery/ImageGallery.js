@@ -41,7 +41,8 @@ export default class ImageGallery extends Component {
         if (prevName !== nextName) {
             this.setState({ status: 'pending', page:1 });
             fetchImages(nextName, nextPage)
-            .then((data) => {
+                .then((data) => {
+                    console.log(data.hits);
                 this.setState({ images: data.hits, searchResult: data.total, status: 'resolved' });
                 console.log(this.state.images);
                 if (this.state.images.length === 0) {
@@ -58,22 +59,41 @@ export default class ImageGallery extends Component {
     }
 
     toggleLoadMore = () => {
-        this.setState({ status: 'pending', page: this.state.page + 1 });   
-//   window.scrollTo({
-    //   top: document.documentElement.scrollHeight,
-    //   behavior: 'smooth',
-// });
+        this.setState({ status: 'pending', page: this.state.page + 1 });
+        // this.scrollTo();
     }
+
+    // scrollTo = () => {
+    //     const { height: cardHeight } = document
+    //             .querySelector('.gallery')
+    //         .firstElementChild.getBoundingClientRect();
+    //     window.scrollBy({
+    //                 top: cardHeight*2,
+    //                 behavior: 'smooth',
+    //             });
+        
+    // }
+
+    
+        
+        
+                
+        
+        // window.scrollTo({
+        //     top: document.documentElement.scrollHeight,
+        //     behavior: 'smooth',
+        // });
+    
             
     render() {
-        const { images, status, searchResult} = this.state;
+        const { images, status, searchResult } = this.state;
 
         if (status === 'idle') {
             return <div></div>
         }
 
         if (status === 'pending') {
-            return <SpinnerLoader />
+            return <SpinnerLoader /> 
         }
 
         if (status === 'rejected') {
@@ -90,13 +110,12 @@ export default class ImageGallery extends Component {
                 <div>
                     <List >
                         {images.map(image=> (
-                            <Item onClick={()=>this.props.onSelect(image.pageURL) } key={uuidv4()} >
-                                <ImageGalleryItem src={image.previewURL} alt={image.tags}/>
+                            <Item onClick={()=>this.props.onSelect(image.largeImageURL) } key={uuidv4()} >
+                                <ImageGalleryItem src={image.webformatURL} alt={image.tags}/>
                             </Item>
                         ))}
                     </List>
                     {searchResult>12 && <LoadMoreButton onClick={this.toggleLoadMore} />}
-                    
                </div>
             )
         }
