@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes, { string } from 'prop-types';
 import IconButton from '../IconButton/IconButton';
 import { ReactComponent as SearchIcon } from '../../icons/search.svg';
-import { toast } from 'react-toastify';
+//import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 
 //import s from './ContactList.module.css';
 
@@ -18,7 +19,14 @@ export default class Searchbar extends Component {
     handleSubmit = e => {
         e.preventDefault();
         if (this.state.searchName.trim() === '') {
-            return toast.error('Введите слово в поиск');
+            // return toast.error('Введите слово в поиск');
+            return toast('Введите слово в поиск', {
+                style: {
+                    borderRadius: '10px',
+                    background: '#333',
+                    color: '#fff',
+                }
+            });
         }
         this.props.onSubmit(this.state.searchName);
         //this.props.onSubmit(this.state.searchName);

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
 import { ToastContainer } from 'react-toastify';
+import { Toaster } from 'react-hot-toast';
 import 'react-toastify/dist/ReactToastify.css'
 
 //import s from './App.module.css';
@@ -13,47 +14,38 @@ import Loader from '../Loader';
 import Searchbar from '../Searchbar';
 import ImageGallery from '../ImageGallery';
 
-const baseUrl = "https://pixabay.com/api/";
-axios.defaults.baseURL = baseUrl;
-const apiKey = "22651538-53630abe578d2561aeb41817a";
-
 class App extends Component {
 
   state = {
     searchName: '',
     images: null,
-    filter: '',
     showModal: false,
+    selectedImage:null
   }
 
-  toggleModal = () => {
-    this.setState(({showModal}) => ({
-      showModal: !showModal,
-    }))
-  }
+  toggleModal = () => this.setState({ selectedImage: null });
 
   handleSearchSubmit = searchName => {
     this.setState({ searchName });
   }
-  
+
+  handleSelectImage = imageUrl => {
+    console.log(imageUrl);
+    this.setState({ selectedImage: imageUrl })
+  }
+
   render() {
-    const { searchName, showModal, images, loading } = this.state;
+    const { searchName, selectedImage  } = this.state;
     
     return (
       <Container>
         <div>
           <Searchbar onSubmit={this.handleSearchSubmit} />
-          <ToastContainer autoClose={3000}/>
-          <ImageGallery searchName={searchName} />
-          
-          <button type="button" onClick ={this.toggleModal}>
-          Open modal
-          </button>
-          {showModal && <Modal onClose = {this.toggleModal}>
-            <h1> Hello</h1>
-            <img src="" alt="" />
-            <button type="button" onClick={this.toggleModal}>Close Modal
-            </button>
+          {/* <ToastContainer autoClose={3000} /> */}
+          <Toaster/>
+          <ImageGallery searchName={searchName} onSelect={this.handleSelectImage}/>
+          {selectedImage && <Modal onClose = {this.toggleModal}>
+            <img src={selectedImage} alt="" />
           </Modal>}
         </div>
       </Container>

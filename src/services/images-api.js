@@ -4,8 +4,8 @@ axios.defaults.baseURL = baseUrl;
 const apiKey = "22651538-53630abe578d2561aeb41817a";
 
 
-export async function fetchImages(name) {
-    let queryParams = `?key=${apiKey}&q=${name}&image_type=photo&per_page=12&page=1&orientation=horizontal&safesearch=true`;
+export async function fetchImages(name, page) {
+    let queryParams = `?key=${apiKey}&q=${name}&image_type=photo&per_page=12&page=${page}&orientation=horizontal&safesearch=true`;
     let url = baseUrl + queryParams;
     return await fetch(url)
                 .then(response => {

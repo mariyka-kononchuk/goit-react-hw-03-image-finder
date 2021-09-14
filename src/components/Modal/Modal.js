@@ -7,7 +7,7 @@ import '../../styles.css';
 const modalRoot = document.querySelector('#modal-root');
 
 class Modal extends Component  {
-    
+
     componentDidMount() {
         console.log('Modal componentDidMount');
         window.addEventListener('keydown', this.handleKeyDown);
@@ -36,7 +36,7 @@ class Modal extends Component  {
             <div className="Overlay" onClick={this.handleBackdropClick}>
                 <div className="Modal">
                     {this.props.children}
-                {/* <img src={src} alt={alt} /> */}
+                {/* <img src={this.props.src} alt="" /> */}
                 </div>
             </div>, modalRoot
         )
