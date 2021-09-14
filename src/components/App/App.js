@@ -1,18 +1,10 @@
 import React, { Component } from 'react';
-import axios from "axios";
-import { v4 as uuidv4 } from 'uuid';
-import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Toaster } from 'react-hot-toast';
-import 'react-toastify/dist/ReactToastify.css'
-
-//import s from './App.module.css';
-
-import Container from '../Container';
-
 import Modal from '../Modal';
-import Loader from '../Loader';
 import Searchbar from '../Searchbar';
 import ImageGallery from '../ImageGallery';
+import {Container} from './App.styled'
 
 class App extends Component {
 
@@ -38,15 +30,14 @@ class App extends Component {
     
     return (
       <Container>
-        <div>
+        
           <Searchbar onSubmit={this.handleSearchSubmit} />
-          {/* <ToastContainer autoClose={3000} /> */}
           <ImageGallery searchName={searchName} onSelect={this.handleSelectImage}/>
           {selectedImage && <Modal onClose = {this.toggleModal}>
             <img src={selectedImage} alt="" />
           </Modal>}
           <Toaster/>
-        </div>
+        
       </Container>
     );
   }

@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { createPortal } from 'react-dom';
+import {Overlay, WindowModal} from './Modal.styled'
 import PropTypes from 'prop-types';
-import '../../styles.css';
-//import s from './ContactList.module.css';
-//import ImageGalleryItem from '../ImageGalleryItem';
+
 const modalRoot = document.querySelector('#modal-root');
 
 class Modal extends Component  {
@@ -32,24 +31,17 @@ class Modal extends Component  {
 
     render() {
         return createPortal(
-
-            <div className="Overlay" onClick={this.handleBackdropClick}>
-                <div className="Modal">
+            <Overlay onClick={this.handleBackdropClick}>
+                <WindowModal>
                     {this.props.children}
-                {/* <img src={this.props.src} alt="" /> */}
-                </div>
-            </div>, modalRoot
+                </WindowModal>
+            </Overlay>, modalRoot
         )
     }  
 }
 
-// ImageGallery.propTypes = {
-//     contacts: PropTypes.arrayOf(
-//         PropTypes.shape({
-//             id: PropTypes.string.isRequired,
-//         })
-//     ),
-//     onDeleteContact:PropTypes.func.isRequired
-// };
+Modal.propTypes = {
+    onClose:PropTypes.func.isRequired
+};
 
 export default Modal;

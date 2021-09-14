@@ -1,18 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-//import s from './ContactListItem.module.css';
+import {ItemImage} from './ImageGalleryItem.styled'
 
 const ImageGalleryItem = ({ src, alt}) => (
-    <img src={src} alt={alt} className="ImageGalleryItem-image" />
+    <ItemImage src={src} alt={alt} />
 )
 
-// ImageGalleryItem.propTypes = {
-//   contacts: PropTypes.shape({
-//     id: PropTypes.string.isRequired,
-//     name: PropTypes.string.isRequired,
-//     number: PropTypes.string.isRequired
-//   }),
-//     onDeleteContact:PropTypes.func.isRequired
-// };
+ImageGalleryItem.propTypes = {
+    src: PropTypes.string.isRequired,
+    alt: PropTypes.string.isRequired,
+};
 
 export default ImageGalleryItem;

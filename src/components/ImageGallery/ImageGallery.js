@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import toast from 'react-hot-toast';
 import PropTypes from 'prop-types';
-//import s from './ContactList.module.css';
+
 import ImageGalleryItem from '../ImageGalleryItem';
 import LoadMoreButton from '../Button';
 import SpinnerLoader from '../Loader';
-//import { toast } from 'react-toastify';
-import toast from 'react-hot-toast';
-import {fetchImages} from '../../services/images-api'
+
+import { fetchImages } from '../../services/images-api';
+import {List, Item} from './ImageGallery.styled.jsx'
 
 export default class ImageGallery extends Component {
 
@@ -87,13 +88,13 @@ export default class ImageGallery extends Component {
         if (status === 'resolved') {
             return (
                 <div>
-                    <ul className="GalleryList" >
+                    <List >
                         {images.map(image=> (
-                            <li onClick={()=>this.props.onSelect(image.pageURL) } className="ImageGalleryItem" key={uuidv4()} >
+                            <Item onClick={()=>this.props.onSelect(image.pageURL) } key={uuidv4()} >
                                 <ImageGalleryItem src={image.previewURL} alt={image.tags}/>
-                            </li>
+                            </Item>
                         ))}
-                    </ul>
+                    </List>
                     {searchResult>12 && <LoadMoreButton onClick={this.toggleLoadMore} />}
                     
                </div>
@@ -102,13 +103,9 @@ export default class ImageGallery extends Component {
     }
 }
 
-
-// ImageGallery.propTypes = {
-//     contacts: PropTypes.arrayOf(
-//         PropTypes.shape({
-//             id: PropTypes.string.isRequired,
-//         })
-//     ),
-//     onDeleteContact:PropTypes.func.isRequired
-// };
+ImageGallery.propTypes = {
+    onSubmit: PropTypes.func,
+    onSelect: PropTypes.func,
+    searchName: PropTypes.string.isRequired,
+};
 
