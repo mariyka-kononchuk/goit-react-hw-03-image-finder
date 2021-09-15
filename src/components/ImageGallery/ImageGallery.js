@@ -32,7 +32,6 @@ export default class ImageGallery extends Component {
             .then((data) => {
                 let newImages = [...images, ...data.hits];
                 this.setState({ images:newImages, status: 'resolved' });
-                console.log(this.state.images);
             })
             .catch (error => this.setState({ error, status: 'rejected' }))
         }
@@ -41,11 +40,8 @@ export default class ImageGallery extends Component {
             this.setState({ status: 'pending', page:1 });
             fetchImages(nextName, nextPage)
                 .then((data) => {
-                    console.log(data.hits);
-                this.setState({ images: data.hits, searchResult: data.total, status: 'resolved' });
-                console.log(this.state.images);
-                if (this.state.images.length === 0) {
-                    // this.setState({ status: 'rejected' });
+                    this.setState({ images: data.hits, searchResult: data.total, status: 'resolved' });
+                    if (this.state.images.length === 0) {
                     return toast('Извините, по вашему запросу ничего не найдено', {style: {
                                 borderRadius: '10px',
                                 background: '#333',

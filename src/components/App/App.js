@@ -19,7 +19,6 @@ class App extends Component {
   }
 
   handleSelectImage = imageUrl => {
-    console.log(imageUrl);
     this.setState({ selectedImage: imageUrl })
   }
 
