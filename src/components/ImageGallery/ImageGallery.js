@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import toast from 'react-hot-toast';
 import PropTypes from 'prop-types';
 
@@ -11,13 +11,17 @@ import {List} from './ImageGallery.styled.jsx'
 
 export default class ImageGallery extends Component {
 
+    
+
     state = {
         images: null,
         error: null,
         page: 1,
         searchResult: null,
-        status: 'idle'
+        status: 'idle',
     }
+
+    myRef = createRef();
 
     componentDidUpdate(prevProps, prevState) {
         const prevName = prevProps.searchName;
@@ -31,9 +35,11 @@ export default class ImageGallery extends Component {
             fetchImages(nextName, nextPage)
             .then((data) => {
                 let newImages = [...images, ...data.hits];
-                this.setState({ images:newImages, status: 'resolved' });
+                this.setState({ images: newImages, status: 'resolved' });
+                this.scrollToRef();
             })
-            .catch (error => this.setState({ error, status: 'rejected' }))
+                .catch(error => this.setState({ error, status: 'rejected' }))
+            ;
         }
 
         if (prevName !== nextName) {
@@ -55,24 +61,12 @@ export default class ImageGallery extends Component {
 
     toggleLoadMore = () => {
         this.setState({ status: 'pending', page: this.state.page + 1 });
-        this.scrollTo();
     }
 
-    scrollTo() {
-        window.scroll({
-            top: 1000,
-            behavior: 'smooth',
-        });
+    scrollToRef = () => {
+        this.myRef.current.scrollIntoView({behavior: "smooth", block: "end"});
     }
-
-    // const { height: cardHeight } = document
-    //             .querySelector('.gallery')
-    //         .firstElementChild.getBoundingClientRect();
-    //     window.scrollBy({
-    //                 top: cardHeight*2,
-    //                 behavior: 'smooth',
-    //             });
-        
+    
     render() {
         const { images, status, searchResult } = this.state;
 
@@ -101,8 +95,9 @@ export default class ImageGallery extends Component {
                             <ImageGalleryItem src={image.webformatURL} alt={image.tags} onClick={() => this.props.onSelect(image.largeImageURL)} key={image.id}/>
                         ))}
                     </List>
-                    {searchResult>12 && <LoadMoreButton onClick={this.toggleLoadMore} />}
-               </div>
+                    <div ref={this.myRef} >{searchResult>12 && <LoadMoreButton onClick={this.toggleLoadMore} />}</div>
+                </div>
+                
             )
         }
     }
