@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import toast from 'react-hot-toast';
 import PropTypes from 'prop-types';
 
@@ -8,7 +7,7 @@ import LoadMoreButton from '../Button';
 import SpinnerLoader from '../Loader';
 
 import { fetchImages } from '../../services/images-api';
-import {List, Item} from './ImageGallery.styled.jsx'
+import {List} from './ImageGallery.styled.jsx'
 
 export default class ImageGallery extends Component {
 
@@ -60,11 +59,17 @@ export default class ImageGallery extends Component {
 
     toggleLoadMore = () => {
         this.setState({ status: 'pending', page: this.state.page + 1 });
-        // this.scrollTo();
+        this.scrollTo();
     }
 
-    // scrollTo = () => {
-    //     const { height: cardHeight } = document
+    scrollTo() {
+        window.scroll({
+            top: 1000,
+            behavior: 'smooth',
+        });
+    }
+
+    // const { height: cardHeight } = document
     //             .querySelector('.gallery')
     //         .firstElementChild.getBoundingClientRect();
     //     window.scrollBy({
@@ -72,19 +77,6 @@ export default class ImageGallery extends Component {
     //                 behavior: 'smooth',
     //             });
         
-    // }
-
-    
-        
-        
-                
-        
-        // window.scrollTo({
-        //     top: document.documentElement.scrollHeight,
-        //     behavior: 'smooth',
-        // });
-    
-            
     render() {
         const { images, status, searchResult } = this.state;
 
@@ -110,9 +102,7 @@ export default class ImageGallery extends Component {
                 <div>
                     <List >
                         {images.map(image=> (
-                            <Item onClick={()=>this.props.onSelect(image.largeImageURL) } key={uuidv4()} >
-                                <ImageGalleryItem src={image.webformatURL} alt={image.tags}/>
-                            </Item>
+                            <ImageGalleryItem src={image.webformatURL} alt={image.tags} onClick={() => this.props.onSelect(image.largeImageURL)} key={image.id}/>
                         ))}
                     </List>
                     {searchResult>12 && <LoadMoreButton onClick={this.toggleLoadMore} />}
