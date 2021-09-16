@@ -19,6 +19,7 @@ export default class ImageGallery extends Component {
         page: 1,
         searchResult: null,
         status: 'idle',
+        spinner: false
     }
 
     myRef = createRef();
@@ -31,22 +32,22 @@ export default class ImageGallery extends Component {
         const images = this.state.images;
 
         if (prevPage < nextPage) {
-            this.setState({ status: 'pending'});
+            this.setState({spinner:true});
             fetchImages(nextName, nextPage)
             .then((data) => {
                 let newImages = [...images, ...data.hits];
-                this.setState({ images: newImages, status: 'resolved' });
+                this.setState({ images: newImages, status: 'resolved', spinner:false });
                 this.scrollToRef();
             })
-                .catch(error => this.setState({ error, status: 'rejected' }))
+                .catch(error => this.setState({ error, status: 'rejected', spinner:false }))
             ;
         }
 
         if (prevName !== nextName) {
-            this.setState({ status: 'pending', page:1 });
+            this.setState({ spinner:true, page:1 });
             fetchImages(nextName, nextPage)
                 .then((data) => {
-                    this.setState({ images: data.hits, searchResult: data.total, status: 'resolved' });
+                    this.setState({ images: data.hits, searchResult: data.total, status: 'resolved', spinner:false });
                     if (this.state.images.length === 0) {
                     return toast('Извините, по вашему запросу ничего не найдено', {style: {
                                 borderRadius: '10px',
@@ -60,7 +61,7 @@ export default class ImageGallery extends Component {
     }
 
     toggleLoadMore = () => {
-        this.setState({ status: 'pending', page: this.state.page + 1 });
+        this.setState({ spinner:true, page: this.state.page + 1 });
     }
 
     scrollToRef = () => {
@@ -68,14 +69,10 @@ export default class ImageGallery extends Component {
     }
     
     render() {
-        const { images, status, searchResult } = this.state;
+        const { images, status, searchResult, spinner } = this.state;
 
         if (status === 'idle') {
             return <div></div>
-        }
-
-        if (status === 'pending') {
-            return <SpinnerLoader /> 
         }
 
         if (status === 'rejected') {
@@ -95,6 +92,7 @@ export default class ImageGallery extends Component {
                             <ImageGalleryItem src={image.webformatURL} alt={image.tags} onClick={() => this.props.onSelect(image.largeImageURL)} key={image.id}/>
                         ))}
                     </List>
+                    {spinner && <SpinnerLoader /> }
                     <div ref={this.myRef} >{searchResult>12 && <LoadMoreButton onClick={this.toggleLoadMore} />}</div>
                 </div>
                 
