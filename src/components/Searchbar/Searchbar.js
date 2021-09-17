@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import toast from 'react-hot-toast';
 import { Header, SearchForm, SearchFormButton, Label, Input } from './Searchbar.styled'
-//import IconButton from '../IconButton/IconButton';
-//import { ReactComponent as SearchIcon } from '../../icons/search.svg';
 
 export default class Searchbar extends Component {
     state = {
@@ -46,9 +44,6 @@ export default class Searchbar extends Component {
                         autoFocus
                         placeholder="Search images and photos"
                     />
-                    {/* <IconButton type = "submit" onClick={this.props.onSubmit} aria-label="Search images">
-                        <SearchIcon width="40" height="40" fill="black" />
-                    </IconButton> */}
                 </SearchForm>
             </Header>
         )

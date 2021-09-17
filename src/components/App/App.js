@@ -22,7 +22,7 @@ class App extends Component {
     this.setState({ selectedImage: imageUrl })
   }
 
-  toggleModal = () => this.setState({ selectedImage: null });
+  closeModal = () => this.setState({ selectedImage: null });
 
   render() {
     const { searchName, selectedImage  } = this.state;
@@ -32,7 +32,7 @@ class App extends Component {
         
           <Searchbar onSubmit={this.handleSearchSubmit} />
           <ImageGallery searchName={searchName} onSelect={this.handleSelectImage}/>
-          {selectedImage && <Modal onClose = {this.toggleModal}>
+          {selectedImage && <Modal onClose = {this.closeModal}>
             <img src={selectedImage} alt="" />
           </Modal>}
           <Toaster/>

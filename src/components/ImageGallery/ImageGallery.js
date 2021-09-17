@@ -11,8 +11,6 @@ import {List} from './ImageGallery.styled.jsx'
 
 export default class ImageGallery extends Component {
 
-    
-
     state = {
         images: null,
         error: null,
