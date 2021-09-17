@@ -43,9 +43,9 @@ export default class ImageGallery extends Component {
 
         if (prevName !== nextName) {
             this.setState({ spinner:true, page:1 });
-            fetchImages(nextName, nextPage)
+            fetchImages(nextName, 1)
                 .then((data) => {
-                    this.setState({ images: data.hits, searchResult: data.total, status: 'resolved', spinner:false });
+                    this.setState({ images: data.hits, searchResult: data.total, status: 'resolved', spinner: false });
                     if (this.state.images.length === 0) {
                     return toast('Извините, по вашему запросу ничего не найдено', {style: {
                                 borderRadius: '10px',
